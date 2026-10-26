@@ -80,7 +80,7 @@ p{margin:0 0 14px}
 .project h2{font-size:clamp(2rem,4vw,3rem)}
 .media figure{margin:0 0 18px}
 .media figcaption{font-size:.78rem;color:var(--muted);margin-top:8px}
-.media img{border-radius:3px;border:1px solid var(--line);width:100%}
+.media img{border-radius:3px;border:1px solid var(--line);width:100%;height:auto}
 .media .pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 blockquote.placard{margin:0 0 18px;padding:4px 0 4px 20px;border-left:2px solid var(--accent);font-family:var(--serif);font-size:1.08rem;line-height:1.6;color:#ddd8cd}
 blockquote.ig{margin:0 0 18px;padding:14px 18px;background:var(--bg2);border:1px solid var(--line);border-radius:4px;font-size:.92rem;color:#d6d2c9}
