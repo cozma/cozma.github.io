@@ -1,0 +1,19 @@
+/* One-page mode (site-onepage only). Loaded after style.css. */
+.op-sec{position:relative;scroll-margin-top:64px}
+.op-sec + .op-sec{border-top:1px solid var(--line)}
+.op-sec + .op-sec::before{content:"";position:absolute;top:-1px;left:max(24px,calc((100% - var(--max))/2 + 24px));width:56px;height:1px;background:var(--accent)}
+main [id]:not(.op-sec){scroll-margin-top:84px}
+.op-sec:focus{outline:none}
+/* later heroes use <h2 class="h1"> (one h1 per page) with the same look */
+.hero .h1{font-size:clamp(2.6rem,7vw,5.2rem);letter-spacing:-.01em}
+/* nav: current section (scroll-spy) */
+.nav a{transition:color .25s,box-shadow .25s}
+.nav a[aria-current]{color:var(--text);box-shadow:inset 0 -1px 0 var(--accent)}
+/* Home overview cards: more compact now that they jump to sections */
+#home .card{min-height:0;padding:22px 22px 24px}
+/* lazy embed placeholders (same height as the player they become) */
+.embed iframe{display:block}
+.lazy-embed{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:10px;font-size:.85rem;text-align:center}
+.radio .lazy-embed{border:0;border-radius:0}
+.lazy-embed span{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
