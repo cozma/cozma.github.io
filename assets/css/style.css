@@ -1,6 +1,6 @@
 /* Dag Yeshiwas — portfolio. Plain CSS, no build step. */
 :root{
-  --bg:#0c0c0e; --bg2:#141417; --line:#26262b; --text:#e9e6df; --muted:#9a968d;
+  --bg:#050d0a; --bg2:#0a1511; --line:#1a2a23; --text:#e9e6df; --muted:#9a968d;
   --accent:#c9a86a; --accent2:#7fb8a4;
   --serif:"Fraunces","Iowan Old Style","Palatino Linotype",Georgia,serif;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -16,7 +16,7 @@ a:hover{border-bottom-color:currentColor}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
 
 /* header / nav */
-.site-header{position:sticky;top:0;z-index:10;background:rgba(12,12,14,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.site-header{position:sticky;top:0;z-index:10;background:rgba(5,13,10,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .site-header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
 .brand{font-family:var(--serif);font-size:1.15rem;color:var(--text);letter-spacing:.02em;border:0}
 .brand span{color:var(--accent)}
@@ -37,6 +37,64 @@ a:hover{border-bottom-color:currentColor}
 .wave i{display:block;width:3px;border-radius:2px;background:var(--accent);opacity:.75;animation:pulse 2.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 @media (prefers-reduced-motion:reduce){.wave i{animation:none}}
+
+/* per-page hero motifs (same 34px footprint as .wave) */
+.anim{position:relative;height:34px;margin:0 0 28px;max-width:100%}
+.anim.paused,.anim.paused *{animation-play-state:paused!important}
+/* home: two drifting sine lines */
+.anim-sine{width:336px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+.anim-sine .ln{position:absolute;left:0;top:0;width:672px;height:34px;animation:drift 7s linear infinite;will-change:transform}
+.anim-sine .ln svg{display:block;width:672px;height:34px;overflow:visible}
+.anim-sine .ln path{fill:none;stroke-linecap:round}
+.anim-sine .l1 path{stroke:var(--accent);stroke-width:1.6;opacity:.85}
+.anim-sine .l2{animation-duration:11s;animation-direction:reverse}
+.anim-sine .l2 path{stroke:var(--accent2);stroke-width:1.2;opacity:.5}
+.anim-sine .l1 svg{animation:breathe 4.8s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes drift{to{transform:translateX(-336px)}}
+@keyframes breathe{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1)}}
+/* day job: packets flowing between nodes */
+.anim-flow{width:300px;overflow:hidden}
+.anim-flow::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line)}
+.anim-flow b{position:absolute;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border:1px solid var(--muted);border-radius:50%;background:var(--bg);opacity:.7;animation:node 2.4s ease-out infinite}
+.anim-flow .pk{position:absolute;left:0;top:50%;width:100%;height:0;animation:travel 4.8s linear infinite;will-change:transform}
+.anim-flow .pk::after{content:"";position:absolute;left:-18px;top:-1px;width:18px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent))}
+@keyframes travel{from{transform:translateX(0)}to{transform:translateX(100%)}}
+@keyframes node{0%,4%{border-color:var(--accent);background:var(--accent);opacity:1}30%,100%{border-color:var(--muted);background:var(--bg);opacity:.7}}
+/* applications: a line of code typing out */
+.anim-code{display:flex;align-items:center;font:13px/1 var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;letter-spacing:.02em}
+.anim-code .pr{color:var(--accent2);margin-right:.6em}
+.anim-code .tx{color:var(--accent)}
+.anim-code .tx em{font-style:normal;color:var(--text);opacity:.75}
+.anim-code .cur{display:inline-block;width:7px;height:15px;margin-left:2px;background:var(--accent);opacity:.8;animation:blink 1.06s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+/* graphics: nested wireframe cubes */
+.anim-cube{display:flex;align-items:center;gap:30px;width:max-content;padding:0 4px;perspective:420px}
+.anim-cube .cb{--h:12px;position:relative;width:24px;height:24px;transform-style:preserve-3d;animation:spin 14s linear infinite}
+.anim-cube .cb .cb{--h:6px;position:absolute;left:6px;top:6px;width:12px;height:12px;animation:spin 9s linear infinite reverse}
+.anim-cube .cb>i{position:absolute;inset:0;border:1px solid var(--accent);opacity:.75}
+.anim-cube .cb .cb>i{border-color:var(--accent2);opacity:.8}
+.anim-cube .cb>i:nth-child(1){transform:translateZ(var(--h))}
+.anim-cube .cb>i:nth-child(2){transform:rotateY(180deg) translateZ(var(--h))}
+.anim-cube .cb>i:nth-child(3){transform:rotateY(90deg) translateZ(var(--h))}
+.anim-cube .cb>i:nth-child(4){transform:rotateY(-90deg) translateZ(var(--h))}
+.anim-cube .cb>i:nth-child(5){transform:rotateX(90deg) translateZ(var(--h))}
+.anim-cube .cb>i:nth-child(6){transform:rotateX(-90deg) translateZ(var(--h))}
+@keyframes spin{from{transform:rotateX(-24deg) rotateY(0)}to{transform:rotateX(-24deg) rotateY(360deg)}}
+/* the dagsby: string lights twinkling */
+.anim-lights{width:320px}
+.anim-lights svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.anim-lights path{fill:none;stroke:var(--muted);stroke-width:1;opacity:.45;vector-effect:non-scaling-stroke}
+.anim-lights i{position:absolute;width:5px;height:7px;margin-left:-2.5px;border-radius:50% 50% 45% 45%/40% 40% 60% 60%;background:var(--accent);opacity:.35;animation:twinkle 4.2s ease-in-out infinite}
+.anim-lights i::before{content:"";position:absolute;left:50%;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,106,.45),rgba(201,168,106,0) 65%);opacity:0;animation:inherit;animation-name:glow}
+@keyframes twinkle{0%,100%{opacity:.35}45%,55%{opacity:1}}
+@keyframes glow{0%,100%{opacity:0}45%,55%{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .anim *,.anim *::before,.anim *::after{animation:none!important}
+  .anim-lights i{opacity:.8}
+  .anim-cube .cb{transform:rotateX(-24deg) rotateY(35deg)}
+  .anim-cube .cb .cb{transform:rotateX(-24deg) rotateY(-50deg)}
+  .anim-lights i:nth-child(3n+2)::before{opacity:.8}
+}
 
 /* hero */
 .hero{padding:96px 0 72px;border-bottom:1px solid var(--line)}
@@ -101,7 +159,7 @@ ul.clean li b{font-weight:500;color:var(--text)}
 /* applications grid */
 .apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
 .app{background:var(--bg2);border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex;flex-direction:column}
-.app .shot{background:#000;aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line)}
+.app .shot{background:#020705;aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line)}
 .app .shot img{width:100%;height:100%;object-fit:cover;object-position:top}
 .app .shot.contain img{object-fit:contain}
 .app .body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
@@ -139,14 +197,14 @@ ul.clean li b{font-weight:500;color:var(--text)}
 /* graphics gallery + lightbox */
 .gallery{columns:3 280px;column-gap:18px}
 .gitem{break-inside:avoid;margin:0 0 22px}
-.gthumb{display:block;width:100%;padding:0;border:1px solid var(--line);background:#000;cursor:zoom-in;border-radius:3px;overflow:hidden}
+.gthumb{display:block;width:100%;padding:0;border:1px solid var(--line);background:#020705;cursor:zoom-in;border-radius:3px;overflow:hidden}
 .gthumb img{width:100%;height:auto;max-height:520px;object-fit:cover;object-position:top;transition:transform .4s,opacity .3s;opacity:.92}
 .gthumb:hover img{transform:scale(1.02);opacity:1}
 .gitem figcaption{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.88rem}
 .gitem .rank{font-family:var(--mono);font-size:.7rem;color:var(--accent)}
 .gitem figcaption a{color:var(--text)}
 .gmeta{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-left:auto}
-.lightbox{position:fixed;inset:0;z-index:50;background:rgba(5,5,6,.94);display:flex;align-items:center;justify-content:center;padding:4vh 4vw}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(2,6,4,.95);display:flex;align-items:center;justify-content:center;padding:4vh 4vw}
 .lightbox[hidden]{display:none}
 .lightbox figure{margin:0;max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center}
 .lightbox img{max-width:92vw;max-height:80vh;object-fit:contain;border:1px solid var(--line)}
@@ -182,9 +240,9 @@ ul.clean li b{font-weight:500;color:var(--text)}
 .car-open:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .car-cap{display:flex;flex-direction:column;gap:2px;margin:10px 0 0;font-size:.88rem}
 .car-cap .gmeta{margin-left:0}
-.car-btn{position:absolute;top:220px;transform:translateY(-50%);z-index:2;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(12,12,14,.85);color:var(--text);font-size:1.2rem;cursor:pointer;transition:background .2s,opacity .2s}
+.car-btn{position:absolute;top:220px;transform:translateY(-50%);z-index:2;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(5,13,10,.85);color:var(--text);font-size:1.2rem;cursor:pointer;transition:background .2s,opacity .2s}
 .car-btn:hover{background:var(--accent);color:var(--bg)}
-.car-btn:disabled{opacity:.25;cursor:default;background:rgba(12,12,14,.85);color:var(--text)}
+.car-btn:disabled{opacity:.25;cursor:default;background:rgba(5,13,10,.85);color:var(--text)}
 .car-prev{left:-14px}.car-next{right:-14px}
 .car-dots{display:flex;justify-content:center;gap:8px;margin-top:18px}
 .car-dot{width:9px;height:9px;padding:0;border-radius:50%;border:1px solid var(--muted);background:transparent;cursor:pointer}
