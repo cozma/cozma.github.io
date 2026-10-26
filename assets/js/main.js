@@ -17,6 +17,84 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+// Per-page hero motifs (.anim-*). Decorative only; CSS does the motion.
+document.addEventListener('DOMContentLoaded', function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(tag, cls, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
+  function sinePath(w, period, amp, mid) {
+    var d = 'M0 ' + mid.toFixed(2);
+    for (var x = 2; x <= w; x += 2) d += ' L' + x + ' ' + (mid + Math.sin(x / period * Math.PI * 2) * amp).toFixed(2);
+    return d;
+  }
+  var builders = {
+    // Home: two sine lines drifting past each other (the "mix").
+    sine: function (a) {
+      [['l1', 84, 11], ['l2', 112, 7]].forEach(function (c) {
+        var ln = el('div', 'ln ' + c[0], a), svg = document.createElementNS(NS, 'svg'), p = document.createElementNS(NS, 'path');
+        svg.setAttribute('viewBox', '0 0 672 34'); p.setAttribute('d', sinePath(672, c[1], c[2], 17));
+        svg.appendChild(p); ln.appendChild(svg);
+      });
+    },
+    // Day Job: packets travelling along a line, lighting nodes as they pass.
+    flow: function (a) {
+      var dur = 4.8, fr = [0.08, 0.3, 0.52, 0.74, 0.94];
+      fr.forEach(function (f) { var b = el('b', '', a); b.style.left = (f * 100) + '%'; b.style.animationDelay = (f * dur - dur).toFixed(2) + 's'; });
+      [0, 0.5].forEach(function (o) { var k = el('span', 'pk', a); k.style.animationDelay = (-o * dur).toFixed(2) + 's'; });
+    },
+    // Applications: a short line of code typing itself out.
+    code: function (a) {
+      var lines = ['git push origin main', 'npm run hack -- --ar', 'new AudioContext()', 'render(<Scene ar />)', 'make it_work && ship'];
+      el('span', 'pr', a).textContent = '$';
+      var tx = el('span', 'tx', a); el('span', 'cur', a);
+      if (reduce) { tx.textContent = lines[0]; return; }
+      var li = 0, ci = 0, del = false;
+      function tick() {
+        if (a.classList.contains('paused')) return setTimeout(tick, 400);
+        var s = lines[li], wait;
+        if (!del) { ci++; wait = ci === s.length ? 2200 : 70 + Math.random() * 70; if (ci === s.length) del = true; }
+        else { ci--; wait = 28; if (ci === 0) { del = false; li = (li + 1) % lines.length; wait = 500; } }
+        tx.textContent = s.slice(0, ci);
+        setTimeout(tick, wait);
+      }
+      setTimeout(tick, 400);
+    },
+    // Graphics: wireframe cubes, each with a counter-rotating cube inside.
+    cube: function (a) {
+      function cube(parent) { var c = el('span', 'cb', parent); for (var i = 0; i < 6; i++) el('i', '', c); return c; }
+      for (var n = 0; n < 3; n++) {
+        var o = cube(a), inner = cube(o);
+        o.style.animationDelay = (-n * 4.7) + 's'; inner.style.animationDelay = (-n * 3) + 's';
+      }
+    },
+    // The Dagsby: a sagging string of bulbs twinkling in sequence.
+    lights: function (a) {
+      var n = 16, top = 3, sag = 16, svg = document.createElementNS(NS, 'svg'), p = document.createElementNS(NS, 'path');
+      svg.setAttribute('viewBox', '0 0 100 34'); svg.setAttribute('preserveAspectRatio', 'none');
+      p.setAttribute('d', 'M0 ' + top + ' Q50 ' + (top + 2 * sag) + ' 100 ' + top);
+      svg.appendChild(p); a.appendChild(svg);
+      for (var i = 0; i < n; i++) {
+        var t = (i + 0.5) / n, b = el('i', '', a);
+        b.style.left = (t * 100).toFixed(2) + '%';
+        b.style.top = (top + 1 + 4 * sag * t * (1 - t)).toFixed(1) + 'px';
+        b.style.animationDelay = ((i * 0.26) % 4.2 - 4.2).toFixed(2) + 's';
+      }
+    }
+  };
+  var anims = document.querySelectorAll('.anim');
+  anims.forEach(function (a) {
+    var m = a.className.match(/\banim-(\w+)/);
+    if (m && builders[m[1]]) builders[m[1]](a);
+  });
+  // Pause motion while the strip is off-screen.
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.target.classList.toggle('paused', !e.isIntersecting); });
+    });
+    anims.forEach(function (a) { io.observe(a); });
+  }
+});
+
 // Lightbox (Graphics gallery + flyers carousel).
 document.addEventListener('DOMContentLoaded', function () {
   var lb = document.querySelector('.lightbox');
