@@ -310,3 +310,8 @@ ul.clean li b{font-weight:500;color:var(--text)}
 /* grid dividers: draw lines on the tiles so nothing flashes while tiles fade in */
 .cards,.flow,.compact{background:transparent}
 .cards>*,.flow>*,.compact>*{box-shadow:0 0 0 1px var(--line)}
+
+/* 3D art carousel */
+.art-car .car-cap .rank{font-family:var(--mono);font-size:.7rem;color:var(--accent);margin-right:4px}
+.art-car .car-cap a{color:var(--text)}
+.art-car .car-cap{max-width:440px}
