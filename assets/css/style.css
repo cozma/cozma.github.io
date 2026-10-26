@@ -306,3 +306,7 @@ ul.clean li b{font-weight:500;color:var(--text)}
   .px-layer,.px-drift{transform:none!important}
 }
 @media print{.reveal{opacity:1!important;transform:none!important}}
+
+/* grid dividers: draw lines on the tiles so nothing flashes while tiles fade in */
+.cards,.flow,.compact{background:transparent}
+.cards>*,.flow>*,.compact>*{box-shadow:0 0 0 1px var(--line)}
