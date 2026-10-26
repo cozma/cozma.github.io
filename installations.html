@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installations · Dag Yeshiwas</title>
+<meta name="description" content="Interactive sound installations by Dag Yeshiwas: Sonic Plants and Sonic Altar at Sound Scene, Hirshhorn Museum.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Inter:wght@400;500&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<header class="site-header"><div class="wrap">
+  <a class="brand" href="index.html">Dag Yeshiwas<span>.</span></a>
+  <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+  <ul class="nav" id="nav">
+<li><a href="day-job.html">Day Job</a></li>
+<li><a href="installations.html" aria-current="page">Installations</a></li>
+<li><a href="applications.html">Applications</a></li>
+<li><a href="graphics.html">Graphics</a></li>
+<li><a href="music.html">Music</a></li>
+<li><a href="the-dagsby.html">The Dagsby</a></li>
+  </ul>
+</div></header>
+<main>
+
+<div class="hero"><div class="wrap">
+  <div class="wave" data-bars="40" aria-hidden="true"></div>
+  <p class="eyebrow">Installations</p>
+  <h1>Listening to<br>what&rsquo;s alive</h1>
+  <p class="lede">Interactive sound works where visitors make the music. Both pieces were presented at <a href="https://www.soundscene.org/dag-yeshiwas">Sound Scene</a>, the audio-arts festival at the Smithsonian&rsquo;s Hirshhorn Museum and Sculpture Garden in Washington, D.C. Dag has worked with the festival since 2019 and is developing new pieces.</p>
+</div></div>
+
+<div class="wrap">
+<article class="project" id="sonic-plants">
+  <div>
+    <p class="eyebrow">01 · Bio-sonification</p>
+    <h2>Sonic Plants</h2>
+    <div class="meta"><span><b>Sound Scene</b>, Hirshhorn Museum &amp; Sculpture Garden</span><span>Washington, D.C.</span><span>Summer 2019</span></div>
+    <p>An interactive, multi-sensory audio installation built around <em>bio-sonification</em>: translating the hidden processes of nature into something people can hear.</p>
+    <p>Sensors clipped onto living plants pick up their internal electrical currents, the tiny voltage fluctuations moving through each plant. Those signals are fed into synthesizers and software, so each plant becomes an interactive MIDI instrument. Visitors touch and interact with the plants, and every gesture shapes a unique ambient soundscape.</p>
+    <p>The piece draws attention to the voltage-based communication inside the plant kingdom, and to how alive nature is.</p>
+    <h4>How it works</h4>
+    <div class="flow">
+      <div><b>Sense</b><span>Clip-on sensors read micro-voltage fluctuations in living plants.</span></div>
+      <div><b>Translate</b><span>The signals become MIDI that drives synthesizers and software.</span></div>
+      <div><b>Play</b><span>Visitors touch the plants and generate ambient music.</span></div>
+    </div>
+    <p class="note">Sonic Plants was Dag&rsquo;s first appearance as a Sound Scene artist, where &ldquo;visitors could make music using electronic current signals transmitted directly from plants&rdquo; (<a href="https://www.soundscene.org/dag-yeshiwas">Sound Scene</a>). The date comes from Dag&rsquo;s Instagram post of April 22, 2020 (&ldquo;Last summer&hellip;&rdquo;).</p>
+  </div>
+  <div class="media">
+    <figure>
+      <a href="https://www.instagram.com/dagtheman/p/B_TATrMnE7X/" style="border:0"><img src="assets/img/sonic-plants-instagram.jpg" alt="A child plays a synthesizer keyboard surrounded by potted plants wired with clip-on sensors and cables." width="640" height="640" loading="lazy"></a>
+      <figcaption>A young visitor playing Sonic Plants. Still from Dag&rsquo;s Instagram video post.</figcaption>
+    </figure>
+    <blockquote class="ig">&ldquo;Last summer I had an installation at the @hirshhorn where people could make music using sonic frequencies transmitted from plants. Nature is powerful and very alive. Happy #earthday 🌿&rdquo;
+      <cite>@dagtheman on Instagram, April 22, 2020 · <a href="https://www.instagram.com/dagtheman/p/B_TATrMnE7X/">View post (photos &amp; video)</a></cite></blockquote>
+  </div>
+</article>
+
+<article class="project" id="sonic-altar">
+  <div>
+    <p class="eyebrow">02 · Sculpture · Light · Sound</p>
+    <h2>Sonic Altar</h2>
+    <div class="meta"><span><b>Sound Scene</b>, Hirshhorn Museum</span><span>Washington, D.C.</span><span>June 2024</span><span>with Serano &amp; Renfro</span><span>Role: <b>programming &amp; software prototyping</b></span></div>
+    <p><b>Dag&rsquo;s role:</b> he wrote all of the programming and prototyped the software for Sonic Altar.</p>
+    <blockquote class="placard">Sonic Altar is an interactive animated installation with three distinct sound-emitting pillars. Participant choices shape a dynamic soundscape and provoke visual response. When the Sun is still, when light and darkness hover on the fulcrum of the veil, what becomes visible? We make the continuum visible to the eye and audible to the ear. What will you do with your individual creative agency? Creators Serano, Yeshiwas, and Renfro unite their practices of programming, engineering, 3-d printing, illustrative animation, musicality, and DIY ethos to culminate in a unique sculptural offering. Alrich &amp; Kawashima engage with the sculptures in a moving contribution to demonstrate how we can leverage our positionality in order to create harmony.</blockquote>
+    <p class="muted small">Text from the installation placard.</p>
+
+    <h4>Inside the pillars</h4>
+    <p>Dag&rsquo;s code is split into three microcontroller programs: <b>create</b>, <b>abstain</b> and <b>destroy</b>. Each pillar senses a visitor and answers with notes and light.</p>
+    <ul class="clean">
+      <li><b>Presence → music.</b> A VL53L4CX time-of-flight sensor measures a visitor&rsquo;s distance. That distance sets the speed of seven-note arpeggios and the brightness of the lights. If someone moves sharply, the current phrase breaks off.</li>
+      <li><b>Notes → light.</b> Each note lights a 17-pixel rainbow segment of a 119-LED NeoPixel strip, so light and sound move in step.</li>
+      <li><b>Synthesis.</b> A VS1053 audio chip works as a General MIDI synthesizer, driven over serial MIDI at 31,250 baud.</li>
+      <li><b>Gesture → stems.</b> In the <em>destroy</em> pillar, an APDS-9960 gesture sensor reads up, down, left and right hand swipes. Each swipe plays one of four MP3 stems from an SD card on the VS1053.</li>
+      <li><b>Light sensing.</b> In the <em>create</em> pillar, an analog light sensor fades the LEDs up when the room gets brighter.</li>
+      <li><b>Effects.</b> Distance also drives an analog control-voltage output labeled &ldquo;DSP CV OUT&rdquo;. The repo includes a Max <em>gen~</em> stereo feedback-delay patch.</li>
+    </ul>
+    <h4>Stack</h4>
+    <ul class="tags"><li>Arduino C++</li><li>Adafruit Feather</li><li>VL53L4CX ToF</li><li>APDS-9960 gesture</li><li>VS1053 MIDI / MP3</li><li>NeoPixel (119 LEDs)</li><li>SD card</li><li>Max gen~</li><li>Logic Pro (stems)</li></ul>
+    <p class="note">Technical details come from the project&rsquo;s private repository. The animation and 3-D printing mentioned on the placard aren&rsquo;t in the repo, so they aren&rsquo;t described here.</p>
+  </div>
+  <div class="media">
+    <figure>
+      <a href="https://www.instagram.com/dagtheman/p/C8mhQqPOvwZ/" style="border:0"><img src="assets/img/sonic-altar-instagram.jpg" alt="Three white pillars with glowing screens and rainbow lights stand along a curved gallery wall at the Hirshhorn." width="640" height="640" loading="lazy"></a>
+      <figcaption>The three pillars of Sonic Altar at the Hirshhorn. Still from Dag&rsquo;s Instagram post.</figcaption>
+    </figure>
+    <blockquote class="ig">&ldquo;Thank you to everyone that came by our installation this weekend and thank you to @soundscenefest and @hirshhorn for having us 💚&rdquo;
+      <cite>@dagtheman on Instagram, June 24, 2024 · <a href="https://www.instagram.com/dagtheman/p/C8mhQqPOvwZ/?img_index=2">View post</a></cite></blockquote>
+    <figure>
+      <img src="assets/img/sonic-altar-placard.jpg" alt="Photo of the Sonic Altar placard text." width="982" height="510" loading="lazy">
+      <figcaption>The installation placard.</figcaption>
+    </figure>
+  </div>
+</article>
+</div>
+
+</main>
+<footer class="site-footer"><div class="wrap">
+  <span>© Dag Yeshiwas · Washington, D.C.</span>
+  <span><a href="https://github.com/cozma">GitHub</a> · <a href="https://devpost.com/cozma">Devpost</a> · <a href="https://www.linkedin.com/in/dagy">LinkedIn</a> · <a href="https://www.instagram.com/dagtheman/">Instagram</a> · <a href="https://soundcloud.com/dagher">SoundCloud</a> · <a href="https://www.instagram.com/thedagsby">The Dagsby</a></span>
+</div></footer>
+</body>
+</html>
