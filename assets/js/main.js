@@ -153,3 +153,115 @@ document.addEventListener('DOMContentLoaded', function () {
     update();
   });
 });
+
+// Scroll reveal + subtle parallax. Progressive enhancement: nothing is hidden
+// unless this script runs (html.js + .reveal are added here), and everything is
+// skipped under prefers-reduced-motion.
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window) || !('requestAnimationFrame' in window)) return;
+  root.classList.add('js');
+
+  var REVEAL = [
+    'main section .section-head', 'main section > .wrap > .eyebrow', 'main section > .wrap > h2',
+    '.card', '.app', '.compact > div', '.job', '.two > div > h2', '.two > div > h3', '.two ul.clean li',
+    '.project h2', '.project .meta', '.project > div > p', '.project > div > h4', '.project .placard',
+    '.project .tags', '.flow > div', '.project ul.clean li', '.media figure', '.media blockquote',
+    '.radio-copy', '.radio-media .embed', '.radio-media h4', '.episodes li',
+    '.plat', '.gitem', '.carousel', '.car-dots',
+    '.review-feature', '.review', '.highlights li', '.rating', 'main section .btn',
+    'main section .note', 'main section > .wrap > p', 'main section > .wrap > h4'
+  ].join(',');
+  var DRIFT = '.media figure > a > img, .app .shot img, .gthumb img';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // ---- reveal ----
+    var items = [].slice.call(document.querySelectorAll(REVEAL)).filter(function (el) {
+      return !el.closest('.hero, .lightbox, .site-header');
+    });
+    // Skip anything nested inside another reveal target (it moves with its parent).
+    var set = new Set(items);
+    items = items.filter(function (el) {
+      for (var p = el.parentElement; p; p = p.parentElement) if (set.has(p)) return false;
+      return true;
+    });
+    function done(el) {
+      el.classList.remove('reveal', 'in'); el.style.transitionDelay = '';
+    }
+    function show(el, delay, instant) {
+      if (!el.classList.contains('reveal') || el.classList.contains('in')) return;
+      io.unobserve(el);
+      if (instant) { el.classList.add('instant'); done(el); el.offsetWidth; el.classList.remove('instant'); return; }
+      el.style.transitionDelay = delay + 'ms';
+      el.classList.add('in');
+      var fin = function (e) { if (!e || e.target === el) { el.removeEventListener('transitionend', fin); clearTimeout(t); done(el); } };
+      var t = setTimeout(fin, delay + 1200);
+      el.addEventListener('transitionend', fin);
+    }
+    var io = new IntersectionObserver(function (entries) {
+      var vis = [];
+      entries.forEach(function (e) {
+        if (e.isIntersecting) vis.push(e);
+        else if (e.boundingClientRect.bottom < 0) show(e.target, 0, true); // already scrolled past (anchor jump)
+      });
+      vis.sort(function (a, b) {
+        var ra = a.boundingClientRect, rb = b.boundingClientRect;
+        return (Math.round(ra.top / 40) - Math.round(rb.top / 40)) || (ra.left - rb.left);
+      });
+      vis.forEach(function (e, i) { show(e.target, Math.min(i, 6) * 85, false); });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.01 });
+    items.forEach(function (el) { el.classList.add('reveal'); io.observe(el); });
+    // Safety net: at the very bottom of the page, show anything still pending.
+    function atBottom() {
+      if (window.innerHeight + window.scrollY >= root.scrollHeight - 4)
+        items.forEach(function (el, i) { show(el, 0, false); });
+    }
+
+    // ---- parallax ----
+    var wide = window.matchMedia('(min-width: 821px)');
+    var heroStrip = document.querySelector('.hero .anim, .hero .wave');
+    var heroFig = document.querySelector('.hero-grid > figure');
+    var hero = document.querySelector('.hero');
+    var drift = [].slice.call(document.querySelectorAll(DRIFT));
+    var near = new Set();
+    var dio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) near.add(e.target); else near.delete(e.target); });
+      queue();
+    }, { rootMargin: '25% 0px' });
+    drift.forEach(function (img) {
+      img.classList.add('px-drift');
+      var frame = img.closest('a, .shot, .gthumb') || img.parentElement;
+      img._frame = frame; frame.classList.add('px-frame');
+      dio.observe(frame); frame._img = img;
+    });
+    if (heroStrip) heroStrip.classList.add('px-layer');
+    if (heroFig) heroFig.classList.add('px-layer');
+
+    var ticking = false;
+    function queue() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+    function frame() {
+      ticking = false;
+      var y = window.scrollY, vh = window.innerHeight, heroH = hero ? hero.offsetHeight : 0;
+      // Reads first…
+      var reads = [];
+      near.forEach(function (fr) { reads.push([fr._img, fr.getBoundingClientRect()]); });
+      // …then writes.
+      if (y < heroH + 200) {
+        var k = Math.min(y, heroH);
+        if (heroStrip) heroStrip.style.transform = 'translate3d(0,' + (-k * 0.22).toFixed(1) + 'px,0)';
+        if (heroFig) heroFig.style.transform = wide.matches ? 'translate3d(0,' + (-k * 0.09).toFixed(1) + 'px,0)' : '';
+      }
+      reads.forEach(function (r) {
+        var rect = r[1], h = rect.height || 1;
+        var p = (rect.top + h / 2 - vh / 2) / (vh / 2 + h / 2); // -1 … 1 across the viewport
+        p = Math.max(-1, Math.min(1, p));
+        // scale(1.08) leaves 4% of height spare on each side; use 90% of it.
+        r[0].style.setProperty('--py', (p * h * 0.036).toFixed(1) + 'px');
+      });
+    }
+    window.addEventListener('scroll', function () { queue(); atBottom(); }, { passive: true });
+    window.addEventListener('resize', queue, { passive: true });
+    queue(); atBottom();
+  });
+})();
