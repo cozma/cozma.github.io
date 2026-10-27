@@ -51,6 +51,28 @@
       window.addEventListener(ev, function () { userNav = true; }, { passive: true, once: true });
     });
 
+    // ---- eased scroll to a section (re-measures the target every frame so late layout shifts don't throw it off)
+    var glideRaf = 0;
+    function glide(t) {
+      cancelAnimationFrame(glideRaf);
+      var y0 = window.scrollY, t0 = performance.now();
+      function dest() {
+        if (!t) return 0;
+        var m = parseFloat(getComputedStyle(t).scrollMarginTop) || 0;
+        return Math.max(0, Math.min(t.getBoundingClientRect().top + window.scrollY - m, root.scrollHeight - window.innerHeight));
+      }
+      var dist = Math.abs(dest() - y0);
+      var dur = reduce ? 350 : Math.min(1400, 550 + dist * 0.06);
+      function stop() { cancelAnimationFrame(glideRaf); ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.removeEventListener(ev, stop); }); }
+      ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stop, { passive: true }); });
+      function step(now) {
+        var k = Math.min(1, (now - t0) / dur), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        window.scrollTo({ top: y0 + (dest() - y0) * e, behavior: 'instant' });
+        if (k < 1) glideRaf = requestAnimationFrame(step); else stop();
+      }
+      glideRaf = requestAnimationFrame(step);
+    }
+
     // ---- in-page links (nav, brand, cards, cross-links)
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href^="#"]');
@@ -60,11 +82,10 @@
       e.preventDefault();
       userNav = true;
       var sec = t.closest('.op-sec');
-      lock = true; clearTimeout(lockT); lockT = setTimeout(unlock, 900);
+      lock = true; clearTimeout(lockT); lockT = setTimeout(unlock, 1500);
       if (sec) setCurrent(sec.id);
       setHash(id === 'home' ? null : id);
-      if (id === 'home') window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-      else t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      glide(id === 'home' ? null : t);
       if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
       t.focus({ preventScroll: true });
       if (nav.classList.contains('open')) { nav.classList.remove('open'); btn && btn.setAttribute('aria-expanded', 'false'); }
