@@ -26,6 +26,10 @@ Use **Test alert** on the main screen to exercise the speaker / image path witho
 
 “Newer watch” is defined as **watchOS 9.0+**, where `AVAudioPlayer` with `.playback` reliably routes to the built-in speaker. Change `WatchAudioCapability.minimumSpeakerWatchOSMajor` if you want a different cut line.
 
+## App Store / Xcode copy
+
+See **[APP_STORE.md](./APP_STORE.md)** for paste-ready listing text, privacy policy, review notes, and Info.plist strings.
+
 ## Open in Xcode
 
 1. Open `WhyAreYouRunning.xcodeproj` on a Mac with Xcode 15+.

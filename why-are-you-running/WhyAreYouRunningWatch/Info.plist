@@ -21,9 +21,9 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>We watch for Running workouts so we can ask the important question when you start jogging.</string>
+	<string>Why Are You Running? reads Running workouts from Health so it can notify you when a run starts. Workout data stays on your devices and is never uploaded by this app.</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Motion data lets us notice when you start running, even before a workout is saved.</string>
+	<string>Motion activity is used only to detect when you begin running, so the app can show its alert. Motion data is processed on your Apple Watch and is not shared.</string>
 	<key>WKBackgroundModes</key>
 	<array>
 		<string>workout-processing</string>
