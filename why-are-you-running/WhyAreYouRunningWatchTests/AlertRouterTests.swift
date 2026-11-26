@@ -67,4 +67,14 @@ final class AlertRouterTests: XCTestCase {
         XCTAssertTrue(WatchAudioCapability.canPlayThroughSpeaker(systemMajorVersion: 9))
         XCTAssertTrue(WatchAudioCapability.canPlayThroughSpeaker(systemMajorVersion: 11))
     }
+
+    func testBackgroundRefreshPreferredInterval() {
+        let now = Date(timeIntervalSince1970: 1_000)
+        let next = BackgroundRefreshPolicy.nextPreferredRefreshDate(after: now)
+        XCTAssertEqual(
+            next.timeIntervalSince(now),
+            BackgroundRefreshPolicy.preferredInterval
+        )
+        XCTAssertEqual(BackgroundRefreshPolicy.preferredInterval, 10 * 60)
+    }
 }

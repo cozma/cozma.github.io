@@ -18,7 +18,9 @@ final class RunAlertSoundPlayer: NSObject, AVAudioPlayerDelegate {
 
         do {
             let session = AVAudioSession.sharedInstance()
-            try session.setCategory(.playback, mode: .default, policy: .default, options: [])
+            // Playback category so a brief HealthKit/background wake can still
+            // route audio to the speaker while the watch is locked.
+            try session.setCategory(.playback, mode: .default, policy: .default, options: [.duckOthers])
             try session.setActive(true)
 
             let audioPlayer = try AVAudioPlayer(contentsOf: url)

@@ -2,25 +2,44 @@ import Foundation
 import CoreMotion
 import HealthKit
 
-/// Watches motion + HealthKit for the moment a run begins.
+enum DetectionWakeReason: String {
+    case foreground
+    case healthKit
+    case scheduledRefresh
+    case test
+}
+
+/// Watches motion + HealthKit for the moment a run begins, including background wakes.
 @MainActor
 final class RunDetectionService: ObservableObject {
+    private static let lastTriggeredKey = "runDetection.lastTriggeredAt"
+
     @Published private(set) var isMonitoring = false
     @Published private(set) var lastStatus: String = "Idle"
-    @Published private(set) var lastTriggeredAt: Date?
+    @Published private(set) var lastTriggeredAt: Date? {
+        didSet {
+            if let lastTriggeredAt {
+                UserDefaults.standard.set(lastTriggeredAt.timeIntervalSince1970, forKey: Self.lastTriggeredKey)
+            }
+        }
+    }
 
     private let motionManager = CMMotionActivityManager()
     private let healthStore = HKHealthStore()
     private var wasRunning = false
     private var observerQuery: HKObserverQuery?
 
-    private var onRunStarted: (@MainActor () -> Void)?
+    private var onRunStarted: (@MainActor (DetectionWakeReason) -> Void)?
 
-    init(onRunStarted: (@MainActor () -> Void)? = nil) {
+    init(onRunStarted: (@MainActor (DetectionWakeReason) -> Void)? = nil) {
         self.onRunStarted = onRunStarted
+        if UserDefaults.standard.object(forKey: Self.lastTriggeredKey) != nil {
+            let ts = UserDefaults.standard.double(forKey: Self.lastTriggeredKey)
+            lastTriggeredAt = Date(timeIntervalSince1970: ts)
+        }
     }
 
-    func setOnRunStarted(_ handler: @escaping @MainActor () -> Void) {
+    func setOnRunStarted(_ handler: @escaping @MainActor (DetectionWakeReason) -> Void) {
         onRunStarted = handler
     }
 
@@ -33,14 +52,14 @@ final class RunDetectionService: ObservableObject {
     }
 
     func start() async {
-        guard !isMonitoring else { return }
-
         let motionOK = await startMotionUpdates()
         let healthOK = await startHealthKitObserver()
 
         isMonitoring = motionOK || healthOK
         if isMonitoring {
-            lastStatus = "Listening for a run…"
+            lastStatus = "Listening in background…"
+            // Catch a run that started while we were suspended.
+            await scanForRecentRun(reason: .foreground)
         } else {
             lastStatus = "Need Motion or Health permission"
         }
@@ -56,9 +75,19 @@ final class RunDetectionService: ObservableObject {
         lastStatus = "Paused"
     }
 
-    /// Manual trigger used by the Test button (and by unit-style previews).
+    /// Called from HealthKit / scheduled background refresh while the watch may be locked.
+    func handleBackgroundWake(reason: DetectionWakeReason) async {
+        if !isMonitoring {
+            // Process may have been relaunched by HealthKit — re-arm observers first.
+            await start()
+            return
+        }
+        lastStatus = "Background check (\(reason.rawValue))…"
+        await scanForRecentRun(reason: reason)
+    }
+
     func simulateRunStart() {
-        handlePossibleRunStart(source: "test")
+        handlePossibleRunStart(source: .test)
     }
 
     private func startMotionUpdates() async -> Bool {
@@ -77,9 +106,8 @@ final class RunDetectionService: ObservableObject {
         let isRunning = activity.running && activity.confidence != .low
         defer { wasRunning = isRunning }
 
-        // Rising edge only: transition into running.
         if isRunning && !wasRunning {
-            handlePossibleRunStart(source: "motion")
+            handlePossibleRunStart(source: .foreground)
         }
     }
 
@@ -93,54 +121,88 @@ final class RunDetectionService: ObservableObject {
             return false
         }
 
+        if let observerQuery {
+            healthStore.stop(observerQuery)
+        }
+
         let query = HKObserverQuery(sampleType: workoutType, predicate: nil) { [weak self] _, completionHandler, error in
             guard error == nil else {
                 completionHandler()
                 return
             }
             Task { @MainActor in
-                await self?.inspectLatestWorkout()
+                // HealthKit may deliver this while the watch is locked mid-workout.
+                await self?.handleBackgroundWake(reason: .healthKit)
                 completionHandler()
             }
         }
 
         observerQuery = query
         healthStore.execute(query)
-        try? await healthStore.enableBackgroundDelivery(for: workoutType, frequency: .immediate)
+
+        do {
+            try await healthStore.enableBackgroundDelivery(for: workoutType, frequency: .immediate)
+        } catch {
+            // Observer still helps while the process is alive.
+        }
         return true
     }
 
-    private func inspectLatestWorkout() async {
+    private func scanForRecentRun(reason: DetectionWakeReason) async {
+        let workoutHit = await hasRecentRunningWorkout()
+        if workoutHit {
+            handlePossibleRunStart(source: reason == .healthKit ? .healthKit : reason)
+            return
+        }
+
+        let motionHit = await hasRecentRunningMotion()
+        if motionHit {
+            handlePossibleRunStart(source: reason)
+        } else if reason == .scheduledRefresh {
+            lastStatus = "Listening in background…"
+        }
+    }
+
+    private func hasRecentRunningWorkout() async -> Bool {
         let workoutType = HKObjectType.workoutType()
         let sort = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
         let predicate = HKQuery.predicateForWorkouts(with: .running)
 
-        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+        return await withCheckedContinuation { continuation in
             let query = HKSampleQuery(
                 sampleType: workoutType,
                 predicate: predicate,
                 limit: 1,
                 sortDescriptors: [sort]
-            ) { [weak self] _, samples, _ in
-                defer { continuation.resume() }
-                guard
-                    let self,
-                    let workout = samples?.first as? HKWorkout
-                else { return }
-
-                // Treat a workout that started in the last two minutes as "just started".
-                let age = Date().timeIntervalSince(workout.startDate)
-                if age >= 0 && age < 120 {
-                    Task { @MainActor in
-                        self.handlePossibleRunStart(source: "healthkit")
-                    }
+            ) { _, samples, _ in
+                guard let workout = samples?.first as? HKWorkout else {
+                    continuation.resume(returning: false)
+                    return
                 }
+                let age = Date().timeIntervalSince(workout.startDate)
+                continuation.resume(returning: age >= 0 && age < 180)
             }
             healthStore.execute(query)
         }
     }
 
-    private func handlePossibleRunStart(source: String) {
+    private func hasRecentRunningMotion() async -> Bool {
+        guard isMotionAvailable else { return false }
+
+        let end = Date()
+        let start = end.addingTimeInterval(-180)
+
+        return await withCheckedContinuation { continuation in
+            motionManager.queryActivityStarting(from: start, to: end, to: .main) { activities, _ in
+                let running = activities?.contains { activity in
+                    activity.running && activity.confidence != .low
+                } ?? false
+                continuation.resume(returning: running)
+            }
+        }
+    }
+
+    private func handlePossibleRunStart(source: DetectionWakeReason) {
         let event = RunEvent(kind: .runningStarted, detectedAt: Date())
         let now = Date()
         guard AlertRouter.shouldTrigger(
@@ -153,7 +215,7 @@ final class RunDetectionService: ObservableObject {
         }
 
         lastTriggeredAt = now
-        lastStatus = "Run detected via \(source)"
-        onRunStarted?()
+        lastStatus = "Run detected (\(source.rawValue))"
+        onRunStarted?(source)
     }
 }

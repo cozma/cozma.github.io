@@ -31,6 +31,11 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
 
+                Text("Keeps listening when the watch is locked. Most reliable if you start a Running workout.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 Label(
                     coordinator.canPlayThroughSpeaker
                         ? "Speaker mode (newer watch)"

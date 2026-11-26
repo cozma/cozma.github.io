@@ -13,6 +13,7 @@ SPEAKER_AND_BANNER = "speakerAndBanner"
 TEXT_AND_IMAGE = "textAndImage"
 DEFAULT_COOLDOWN = 30 * 60
 MINIMUM_SPEAKER_WATCHOS_MAJOR = 9
+PREFERRED_BACKGROUND_REFRESH_INTERVAL = 10 * 60
 
 
 def presentation(can_play_through_speaker: bool) -> str:
@@ -59,6 +60,11 @@ class AlertRouterTests(unittest.TestCase):
         self.assertFalse(can_play_through_speaker(8))
         self.assertTrue(can_play_through_speaker(9))
         self.assertTrue(can_play_through_speaker(11))
+
+    def test_background_refresh_preferred_interval(self):
+        now = 1_000.0
+        next_at = now + PREFERRED_BACKGROUND_REFRESH_INTERVAL
+        self.assertEqual(next_at - now, 10 * 60)
 
 
 if __name__ == "__main__":

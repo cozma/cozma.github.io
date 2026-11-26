@@ -3,7 +3,8 @@ import UserNotifications
 
 @main
 struct WhyAreYouRunningApp: App {
-    @StateObject private var coordinator = RunAlertCoordinator()
+    @WKApplicationDelegateAdaptor(WatchAppDelegate.self) var appDelegate
+    @ObservedObject private var coordinator = RunAlertCoordinator.shared
 
     var body: some Scene {
         WindowGroup {

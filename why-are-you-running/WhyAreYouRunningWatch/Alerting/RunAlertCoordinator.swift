@@ -4,6 +4,8 @@ import Foundation
 /// Ties detection → routing → speaker / notification.
 @MainActor
 final class RunAlertCoordinator: ObservableObject {
+    static let shared = RunAlertCoordinator()
+
     @Published private(set) var lastPresentation: AlertPresentation?
     @Published private(set) var canPlayThroughSpeaker: Bool
     @Published private(set) var detection: RunDetectionService
@@ -11,6 +13,7 @@ final class RunAlertCoordinator: ObservableObject {
     private let soundPlayer: RunAlertSoundPlayer
     private let notifier: RunAlertNotifier
     private var detectionCancellable: AnyCancellable?
+    private var didBootstrap = false
 
     init(
         soundPlayer: RunAlertSoundPlayer = .shared,
@@ -26,7 +29,7 @@ final class RunAlertCoordinator: ObservableObject {
             self?.objectWillChange.send()
         }
 
-        detection.setOnRunStarted { [weak self] in
+        detection.setOnRunStarted { [weak self] _ in
             Task { @MainActor in
                 await self?.deliverAlert()
             }
@@ -34,8 +37,24 @@ final class RunAlertCoordinator: ObservableObject {
     }
 
     func bootstrap() async {
+        guard !didBootstrap else {
+            // Process may already be monitoring after a HealthKit relaunch.
+            if !detection.isMonitoring {
+                await detection.start()
+            }
+            return
+        }
+        didBootstrap = true
         _ = await notifier.requestAuthorization()
         await detection.start()
+        BackgroundRefreshScheduler.scheduleNext()
+    }
+
+    func handleBackgroundWake(reason: DetectionWakeReason) async {
+        if !didBootstrap {
+            await bootstrap()
+        }
+        await detection.handleBackgroundWake(reason: reason)
     }
 
     func deliverAlert() async {
@@ -44,12 +63,15 @@ final class RunAlertCoordinator: ObservableObject {
 
         switch presentation {
         case .speakerAndBanner:
+            // Brief background wakes (HealthKit / refresh) still get speaker audio
+            // when the system allows it; the notification covers locked-screen delivery.
             soundPlayer.play()
-            // Banner without the still — the audio is the punchline.
             await notifier.postRunAlert(includeImage: false)
         case .textAndImage:
             await notifier.postRunAlert(includeImage: true)
         }
+
+        BackgroundRefreshScheduler.scheduleNext()
     }
 
     func testAlert() async {

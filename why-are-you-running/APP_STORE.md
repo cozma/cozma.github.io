@@ -109,13 +109,14 @@ HOW IT WORKS
 • Listens for running motion and Running workouts from Apple Health
 • On newer Apple Watches, plays your alert sound through the speaker and shows a banner
 • On older Apple Watches, shows a notification with text and an image
+• Keeps listening when the watch is locked — best when you start a Running workout
 • Includes a Test alert button so you can try it without going for a jog
 • Uses a cooldown so a long run doesn’t keep repeating the alert
 
 PERMISSIONS
 • Motion — to detect when running begins
 • Health (Running workouts) — to catch workouts you start in the Workout app
-• Notifications — to deliver the alert
+• Notifications — to deliver the alert (time-sensitive while you exercise)
 
 Your motion and workout data are used on-device to trigger the alert. This app does not create an account and does not upload your health data to a server.
 
@@ -131,13 +132,14 @@ HOW IT WORKS
 • Listens for running motion and Running workouts from Apple Health
 • On newer Apple Watches, plays an alert sound through the speaker and shows a banner
 • On older Apple Watches, shows a notification with text and an image
+• Keeps listening when the watch is locked — best when you start a Running workout
 • Includes a Test alert button so you can try it without going for a jog
 • Uses a cooldown so a long run doesn’t keep repeating the alert
 
 PERMISSIONS
 • Motion — to detect when running begins
 • Health (Running workouts) — to catch workouts you start in the Workout app
-• Notifications — to deliver the alert
+• Notifications — to deliver the alert (time-sensitive while you exercise)
 
 Your motion and workout data are used on-device to trigger the alert. This app does not create an account and does not upload your health data to a server.
 ```
@@ -198,14 +200,16 @@ This is a watch-only app. No iPhone companion UI is required.
 HOW TO DEMO WITHOUT RUNNING OUTSIDE
 1. Install on an Apple Watch (or Watch simulator paired in Xcode).
 2. Launch “Why Running?”.
-3. Allow Notifications, Motion, and Health when prompted.
+3. Allow Notifications (including Time Sensitive if prompted), Motion, and Health when prompted.
 4. Tap “Test alert”.
    - On watchOS 9+: you should hear the alert sound and see a banner.
    - On older watchOS: you should see a notification with text and an image attachment.
 
-OPTIONAL REAL DETECTION PATH
-• Start a Running workout in the Workout app, or begin running with the watch on.
-• Within a short time the same alert should fire (subject to a 30-minute cooldown).
+LOCKED-WATCH / BACKGROUND PATH
+• Leave the app (wrist down / locked is fine).
+• Start a Running workout in the Workout app.
+• HealthKit background delivery should wake the app and post a time-sensitive notification (speaker audio may also play on newer watches during that brief wake).
+• Background refresh may also catch recent running motion; workout start is the most reliable demo.
 
 DATA USE
 • Reads Motion activity and HealthKit Running workouts only to detect run start.

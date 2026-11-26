@@ -2,6 +2,7 @@ import Foundation
 import UserNotifications
 
 /// Builds and posts the local notification for a detected run.
+/// Uses time-sensitive delivery so the alert can show while the watch is locked mid-workout.
 @MainActor
 final class RunAlertNotifier {
     static let shared = RunAlertNotifier()
@@ -13,7 +14,7 @@ final class RunAlertNotifier {
 
     func requestAuthorization() async -> Bool {
         do {
-            return try await center.requestAuthorization(options: [.alert, .sound])
+            return try await center.requestAuthorization(options: [.alert, .sound, .timeSensitive])
         } catch {
             return false
         }
@@ -28,6 +29,8 @@ final class RunAlertNotifier {
         // Custom `soundNamed` is unavailable on watchOS; default tick + our
         // AVAudioPlayer path covers newer hardware.
         content.sound = .default
+        // Helps surface the alert on a locked watch / during Focus while exercising.
+        content.interruptionLevel = .timeSensitive
 
         if includeImage, let attachment = makeImageAttachment() {
             content.attachments = [attachment]
@@ -47,7 +50,6 @@ final class RunAlertNotifier {
             return nil
         }
 
-        // Attachments must be file URLs the system can own; copy into a temp file.
         let tempURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("run_alert_still-\(UUID().uuidString).png")
 

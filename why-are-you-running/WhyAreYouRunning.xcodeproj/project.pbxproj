@@ -15,6 +15,9 @@
 		A10000000000000000000006 /* RunAlertNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* RunAlertNotifier.swift */; };
 		A10000000000000000000007 /* RunAlertCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* RunAlertCoordinator.swift */; };
 		A10000000000000000000008 /* RunDetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* RunDetectionService.swift */; };
+		A1000000000000000000000E /* WatchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* WatchAppDelegate.swift */; };
+		A1000000000000000000000F /* BackgroundRefreshScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* BackgroundRefreshScheduler.swift */; };
+		A10000000000000000000011 /* BackgroundRefreshPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* BackgroundRefreshPolicy.swift */; };
 		A10000000000000000000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* Assets.xcassets */; };
 		A1000000000000000000000A /* run_alert.wav in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* run_alert.wav */; };
 		A1000000000000000000000B /* run_alert_still.png in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* run_alert_still.png */; };
@@ -40,6 +43,9 @@
 		A20000000000000000000006 /* RunAlertNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunAlertNotifier.swift; sourceTree = "<group>"; };
 		A20000000000000000000007 /* RunAlertCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunAlertCoordinator.swift; sourceTree = "<group>"; };
 		A20000000000000000000008 /* RunDetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDetectionService.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* WatchAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppDelegate.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* BackgroundRefreshScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshScheduler.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* BackgroundRefreshPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshPolicy.swift; sourceTree = "<group>"; };
 		A20000000000000000000009 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000000000000000000000A /* run_alert.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = run_alert.wav; sourceTree = "<group>"; };
 		A2000000000000000000000B /* run_alert_still.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run_alert_still.png; sourceTree = "<group>"; };
@@ -81,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000001 /* WhyAreYouRunningApp.swift */,
+				A2000000000000000000000F /* WatchAppDelegate.swift */,
 				A20000000000000000000002 /* ContentView.swift */,
 				A70000000000000000000005 /* Alerting */,
 				A70000000000000000000006 /* RunDetection */,
@@ -117,6 +124,7 @@
 				A20000000000000000000005 /* RunAlertSoundPlayer.swift */,
 				A20000000000000000000006 /* RunAlertNotifier.swift */,
 				A20000000000000000000007 /* RunAlertCoordinator.swift */,
+				A20000000000000000000011 /* BackgroundRefreshPolicy.swift */,
 			);
 			path = Alerting;
 			sourceTree = "<group>";
@@ -125,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000008 /* RunDetectionService.swift */,
+				A20000000000000000000010 /* BackgroundRefreshScheduler.swift */,
 			);
 			path = RunDetection;
 			sourceTree = "<group>";
@@ -239,6 +248,9 @@
 				A10000000000000000000006 /* RunAlertNotifier.swift in Sources */,
 				A10000000000000000000007 /* RunAlertCoordinator.swift in Sources */,
 				A10000000000000000000008 /* RunDetectionService.swift in Sources */,
+				A1000000000000000000000E /* WatchAppDelegate.swift in Sources */,
+				A1000000000000000000000F /* BackgroundRefreshScheduler.swift in Sources */,
+				A10000000000000000000011 /* BackgroundRefreshPolicy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

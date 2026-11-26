@@ -4,8 +4,11 @@ Independent watchOS app that notices when you start a run and asks the question:
 
 - **Newer watches (watchOS 9+):** plays your bundled audio through the watch speaker and shows a banner.
 - **Older watches (watchOS 8 on supported hardware):** shows a text notification with an attached still image (custom `UNNotificationSound.soundNamed` is unavailable on watchOS).
+- **Locked watch / mid-run:** keeps listening via HealthKit background delivery + scheduled background refresh, then posts a **time-sensitive** notification (and tries speaker audio on brief wakes).
 
 Minimum install target is **watchOS 8**; speaker vs. image is chosen at runtime.
+
+**Assumption:** the most reliable locked-watch path is starting a **Running** workout (Workout app or any HealthKit running workout). Pure motion without a workout is best-effort when watchOS grants a background refresh.
 
 ## Your audio
 
@@ -15,10 +18,11 @@ Supported easily: short linear PCM `.wav` (a few seconds is ideal for the watch 
 
 ## How detection works
 
-1. **Core Motion** – rising edge into `CMMotionActivity.running` (confidence not `.low`).
-2. **HealthKit** – background observer on running `HKWorkout` samples that started in the last two minutes.
+1. **HealthKit (primary for locked watch)** – `HKObserverQuery` + immediate background delivery on workouts; wakes the app when a Running workout appears even if the screen is locked.
+2. **Background refresh** – asks watchOS to wake the app about every 10 minutes to re-query recent motion + workouts.
+3. **Core Motion** – rising edge into `CMMotionActivity.running` while the process is alive; recent-activity query on background wakes.
 
-A **30-minute cooldown** stops a long jog from re-firing the alert.
+A **30-minute cooldown** (persisted) stops a long jog from re-firing the alert.
 
 Use **Test alert** on the main screen to exercise the speaker / image path without going outside.
 
