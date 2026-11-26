@@ -11,13 +11,13 @@
 		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* ContentView.swift */; };
 		A10000000000000000000003 /* AlertRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* AlertRouter.swift */; };
 		A10000000000000000000004 /* WatchAudioCapability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* WatchAudioCapability.swift */; };
-		A10000000000000000000005 /* VineSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* VineSoundPlayer.swift */; };
+		A10000000000000000000005 /* RunAlertSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* RunAlertSoundPlayer.swift */; };
 		A10000000000000000000006 /* RunAlertNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* RunAlertNotifier.swift */; };
 		A10000000000000000000007 /* RunAlertCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* RunAlertCoordinator.swift */; };
 		A10000000000000000000008 /* RunDetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* RunDetectionService.swift */; };
 		A10000000000000000000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* Assets.xcassets */; };
-		A1000000000000000000000A /* why_are_you_running.wav in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* why_are_you_running.wav */; };
-		A1000000000000000000000B /* vine_still.png in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* vine_still.png */; };
+		A1000000000000000000000A /* run_alert.wav in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* run_alert.wav */; };
+		A1000000000000000000000B /* run_alert_still.png in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* run_alert_still.png */; };
 		A1000000000000000000000C /* AlertRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000C /* AlertRouterTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,13 +36,13 @@
 		A20000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A20000000000000000000003 /* AlertRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRouter.swift; sourceTree = "<group>"; };
 		A20000000000000000000004 /* WatchAudioCapability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioCapability.swift; sourceTree = "<group>"; };
-		A20000000000000000000005 /* VineSoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VineSoundPlayer.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* RunAlertSoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunAlertSoundPlayer.swift; sourceTree = "<group>"; };
 		A20000000000000000000006 /* RunAlertNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunAlertNotifier.swift; sourceTree = "<group>"; };
 		A20000000000000000000007 /* RunAlertCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunAlertCoordinator.swift; sourceTree = "<group>"; };
 		A20000000000000000000008 /* RunDetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDetectionService.swift; sourceTree = "<group>"; };
 		A20000000000000000000009 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A2000000000000000000000A /* why_are_you_running.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = why_are_you_running.wav; sourceTree = "<group>"; };
-		A2000000000000000000000B /* vine_still.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vine_still.png; sourceTree = "<group>"; };
+		A2000000000000000000000A /* run_alert.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = run_alert.wav; sourceTree = "<group>"; };
+		A2000000000000000000000B /* run_alert_still.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run_alert_still.png; sourceTree = "<group>"; };
 		A2000000000000000000000C /* AlertRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRouterTests.swift; sourceTree = "<group>"; };
 		A2000000000000000000000D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2000000000000000000000E /* WhyAreYouRunning.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WhyAreYouRunning.entitlements; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 			children = (
 				A20000000000000000000003 /* AlertRouter.swift */,
 				A20000000000000000000004 /* WatchAudioCapability.swift */,
-				A20000000000000000000005 /* VineSoundPlayer.swift */,
+				A20000000000000000000005 /* RunAlertSoundPlayer.swift */,
 				A20000000000000000000006 /* RunAlertNotifier.swift */,
 				A20000000000000000000007 /* RunAlertCoordinator.swift */,
 			);
@@ -132,8 +132,8 @@
 		A70000000000000000000007 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A2000000000000000000000A /* why_are_you_running.wav */,
-				A2000000000000000000000B /* vine_still.png */,
+				A2000000000000000000000A /* run_alert.wav */,
+				A2000000000000000000000B /* run_alert_still.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -219,8 +219,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000009 /* Assets.xcassets in Resources */,
-				A1000000000000000000000A /* why_are_you_running.wav in Resources */,
-				A1000000000000000000000B /* vine_still.png in Resources */,
+				A1000000000000000000000A /* run_alert.wav in Resources */,
+				A1000000000000000000000B /* run_alert_still.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,7 +235,7 @@
 				A10000000000000000000002 /* ContentView.swift in Sources */,
 				A10000000000000000000003 /* AlertRouter.swift in Sources */,
 				A10000000000000000000004 /* WatchAudioCapability.swift in Sources */,
-				A10000000000000000000005 /* VineSoundPlayer.swift in Sources */,
+				A10000000000000000000005 /* RunAlertSoundPlayer.swift in Sources */,
 				A10000000000000000000006 /* RunAlertNotifier.swift in Sources */,
 				A10000000000000000000007 /* RunAlertCoordinator.swift in Sources */,
 				A10000000000000000000008 /* RunDetectionService.swift in Sources */,

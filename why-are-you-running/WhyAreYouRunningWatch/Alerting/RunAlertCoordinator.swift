@@ -8,12 +8,12 @@ final class RunAlertCoordinator: ObservableObject {
     @Published private(set) var canPlayThroughSpeaker: Bool
     @Published private(set) var detection: RunDetectionService
 
-    private let soundPlayer: VineSoundPlayer
+    private let soundPlayer: RunAlertSoundPlayer
     private let notifier: RunAlertNotifier
     private var detectionCancellable: AnyCancellable?
 
     init(
-        soundPlayer: VineSoundPlayer = .shared,
+        soundPlayer: RunAlertSoundPlayer = .shared,
         notifier: RunAlertNotifier = .shared,
         canPlayThroughSpeaker: Bool = WatchAudioCapability.canPlayThroughSpeaker()
     ) {

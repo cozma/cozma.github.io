@@ -8,12 +8,12 @@ struct ContentView: View {
             if #available(watchOS 9.0, *) {
                 NavigationStack {
                     mainScroll
-                        .navigationTitle("Vine Watch")
+                        .navigationTitle("Why Running?")
                 }
             } else {
                 NavigationView {
                     mainScroll
-                        .navigationTitle("Vine Watch")
+                        .navigationTitle("Why Running?")
                 }
             }
         }

@@ -27,7 +27,7 @@ enum AlertRouter {
     }
 
     /// Fires only on a fresh run start, and respects a cooldown so a long jog
-    /// does not spam the vine every few minutes.
+    /// does not re-trigger the alert every few minutes.
     static func shouldTrigger(
         for event: RunEvent,
         lastTriggeredAt: Date?,

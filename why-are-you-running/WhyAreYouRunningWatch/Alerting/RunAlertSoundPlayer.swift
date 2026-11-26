@@ -1,13 +1,14 @@
 import Foundation
 import AVFoundation
 
-/// Plays the bundled "why are you running?" phrase through the watch speaker.
+/// Plays the bundled `run_alert` audio through the watch speaker.
+/// Drop your own track at `Resources/run_alert.wav` (same filename) before shipping.
 @MainActor
-final class VineSoundPlayer: NSObject, AVAudioPlayerDelegate {
-    static let shared = VineSoundPlayer()
+final class RunAlertSoundPlayer: NSObject, AVAudioPlayerDelegate {
+    static let shared = RunAlertSoundPlayer()
 
     private var player: AVAudioPlayer?
-    private let resourceName = "why_are_you_running"
+    private let resourceName = "run_alert"
     private let resourceExtension = "wav"
 
     func play() {

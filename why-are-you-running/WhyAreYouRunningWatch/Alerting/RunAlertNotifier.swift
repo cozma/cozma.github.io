@@ -7,7 +7,7 @@ final class RunAlertNotifier {
     static let shared = RunAlertNotifier()
 
     static let title = "Why are you running?"
-    static let body = "We caught you mid-jog. Classic."
+    static let body = "We caught you mid-jog."
 
     private let center = UNUserNotificationCenter.current()
 
@@ -20,7 +20,7 @@ final class RunAlertNotifier {
     }
 
     /// Posts a local notification. When `includeImage` is true, attaches the
-    /// bundled still so older watches still get the meme without speaker audio.
+    /// bundled still so older watches still get a visual without speaker audio.
     func postRunAlert(includeImage: Bool) async {
         let content = UNMutableNotificationContent()
         content.title = Self.title
@@ -43,13 +43,13 @@ final class RunAlertNotifier {
     }
 
     private func makeImageAttachment() -> UNNotificationAttachment? {
-        guard let bundled = Bundle.main.url(forResource: "vine_still", withExtension: "png") else {
+        guard let bundled = Bundle.main.url(forResource: "run_alert_still", withExtension: "png") else {
             return nil
         }
 
         // Attachments must be file URLs the system can own; copy into a temp file.
         let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("vine_still-\(UUID().uuidString).png")
+            .appendingPathComponent("run_alert_still-\(UUID().uuidString).png")
 
         do {
             if FileManager.default.fileExists(atPath: tempURL.path) {
@@ -57,7 +57,7 @@ final class RunAlertNotifier {
             }
             try FileManager.default.copyItem(at: bundled, to: tempURL)
             return try UNNotificationAttachment(
-                identifier: "vine-still",
+                identifier: "run-alert-still",
                 url: tempURL,
                 options: [UNNotificationAttachmentOptionsTypeHintKey: "public.png"]
             )
