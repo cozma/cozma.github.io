@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Morning Board · prototype</title>
+  <meta name="description" content="Interactive prototype of an Apple TV morning health board fed by an iPhone companion.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Literata:opsz,wght@7..72,450;7..72,560&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="phone" aria-label="iPhone companion mock">
+      <p class="eyebrow">iPhone companion</p>
+      <h1>Collect → publish</h1>
+      <p>HealthKit stays on the phone. This panel mocks the companion: pick a morning, then publish a small snapshot the TV can read.</p>
+      <p class="status" id="phone-status">Health connected (demo). Choose a scenario.</p>
+
+      <div class="scenarios" id="scenarios" role="listbox" aria-label="Demo scenarios"></div>
+
+      <button class="primary" id="publish" type="button">Publish to Apple TV</button>
+      <button class="primary" id="clear" type="button" style="background:transparent;color:var(--ink);border:1px solid var(--stroke)">Clear TV board</button>
+      <p class="hint">Same flow as Swift: SnapshotBuilder → BoardStore → TV MorningBoardView.</p>
+    </aside>
+
+    <section class="tv-shell" aria-label="Apple TV morning board">
+      <p class="eyebrow">Apple TV · 10-foot board</p>
+      <div class="tv-bezel" id="tv">
+        <div class="empty" id="empty-state">
+          <h2>Morning Board</h2>
+          <p>No board yet. Open the iPhone app, connect Health, then Publish.</p>
+          <ol>
+            <li>Install Morning Board on iPhone</li>
+            <li>Connect Apple Health</li>
+            <li>Tap Publish to Apple TV</li>
+          </ol>
+        </div>
+
+        <div id="board" hidden>
+          <div class="board-top">
+            <div>
+              <p class="greeting" id="greeting">Good morning</p>
+              <h2 class="band" id="band">Maintain</h2>
+              <p class="insight" id="insight">Today’s cue</p>
+            </div>
+            <div class="dial" aria-label="Readiness score">
+              <strong id="score">72</strong>
+              <span>READINESS</span>
+            </div>
+          </div>
+
+          <div class="tiles">
+            <button class="tile" type="button" data-tile="sleep">
+              <p class="label">Sleep</p>
+              <p class="value" id="sleep-value">—</p>
+              <p class="detail" id="sleep-detail">Last night</p>
+              <p class="source" id="sleep-source"></p>
+            </button>
+            <button class="tile" type="button" data-tile="load">
+              <p class="label">Load</p>
+              <p class="value" id="load-value">—</p>
+              <p class="detail" id="load-detail">Yesterday</p>
+              <p class="source" id="load-source"></p>
+            </button>
+            <button class="tile" type="button" data-tile="workout">
+              <p class="label">Last session</p>
+              <p class="value" id="workout-value">—</p>
+              <p class="detail" id="workout-detail">No workout</p>
+              <p class="source" id="workout-source"></p>
+            </button>
+          </div>
+
+          <div class="footer" id="footer">
+            <span id="tv-status">Updated</span>
+            <button class="primary" id="refresh" type="button" style="padding:10px 16px">Refresh</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

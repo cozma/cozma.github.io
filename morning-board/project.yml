@@ -1,0 +1,59 @@
+name: MorningBoard
+options:
+  bundleIdPrefix: com.cozma
+  deploymentTarget:
+    iOS: "17.0"
+    tvOS: "17.0"
+  createIntermediateGroups: true
+
+packages:
+  MorningBoardKit:
+    path: .
+
+settings:
+  BASE_SDK: iphoneos
+  SWIFT_VERSION: "5.9"
+
+targets:
+  MorningBoard:
+    type: application
+    platform: iOS
+    sources:
+      - path: Apps/iOS
+    dependencies:
+      - package: MorningBoardKit
+        product: MorningBoardKit
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.cozma.MorningBoard
+      INFOPLIST_KEY_NSHealthShareUsageDescription: Morning Board reads sleep, heart, and activity summaries to build today’s TV board.
+      INFOPLIST_KEY_NSHealthUpdateUsageDescription: Morning Board does not write to Health.
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      CODE_SIGN_ENTITLEMENTS: Apps/iOS/MorningBoard.entitlements
+    entitlements:
+      path: Apps/iOS/MorningBoard.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.cozma.MorningBoard
+        com.apple.developer.icloud-services:
+          - CloudKit
+
+  MorningBoardTV:
+    type: application
+    platform: tvOS
+    sources:
+      - path: Apps/tvOS
+    dependencies:
+      - package: MorningBoardKit
+        product: MorningBoardKit
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.cozma.MorningBoard
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      CODE_SIGN_ENTITLEMENTS: Apps/tvOS/MorningBoardTV.entitlements
+    entitlements:
+      path: Apps/tvOS/MorningBoardTV.entitlements
+      properties:
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.cozma.MorningBoard
+        com.apple.developer.icloud-services:
+          - CloudKit
